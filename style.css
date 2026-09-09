@@ -521,6 +521,103 @@ ul { margin: 0; padding: 0; list-style: none; }
 .metric:hover { transform: translateY(-2px); }
 
 /* ===========================================================
+   Web-slinger motion: hanging hero, corner webs, click strands
+   Generic thread/web imagery only — no character branding.
+=========================================================== */
+.hero-thread {
+  width: 1px;
+  height: 0;
+  background: var(--accent);
+  margin: 0 auto;
+  animation: threadExtend 0.4s ease-out forwards, threadRetract 0.35s ease-in 0.75s forwards;
+}
+@keyframes threadExtend { from { height: 0; } to { height: 34px; } }
+@keyframes threadRetract { to { height: 0; opacity: 0; } }
+
+.statement-panel {
+  animation: heroDrop 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 0.12s;
+}
+@keyframes heroDrop {
+  0% { transform: translateY(-46px); opacity: 0; }
+  58% { transform: translateY(6px); opacity: 1; }
+  78% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+.web-deco {
+  position: fixed;
+  width: 160px;
+  height: 160px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+}
+.web-deco g {
+  stroke: var(--ink);
+  stroke-width: 1;
+  fill: none;
+}
+.web-deco.top-left {
+  top: 0;
+  left: 0;
+  transform-origin: 0% 0%;
+  animation: webDrift 200s linear infinite;
+}
+.web-deco.bottom-right {
+  bottom: 0;
+  right: 0;
+  transform: rotate(180deg);
+  transform-origin: 100% 100%;
+  animation: webDriftReverse 200s linear infinite;
+}
+@keyframes webDrift {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(3deg); }
+}
+@keyframes webDriftReverse {
+  from { transform: rotate(180deg); }
+  to { transform: rotate(183deg); }
+}
+
+.click-strand {
+  stroke: var(--accent);
+  stroke-width: 1;
+  opacity: 0.5;
+  transition: opacity 0.5s ease;
+}
+.click-strand.fade { opacity: 0; }
+
+/* Small thread nub above each element as it drops into view */
+.reveal { position: relative; }
+.reveal::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: 22px;
+  width: 1px;
+  height: 0;
+  background: var(--accent);
+  opacity: 0;
+}
+.reveal.in-view::before {
+  animation: nubDrop 0.4s ease-out forwards, nubFade 0.35s ease-in 0.4s forwards;
+}
+@keyframes nubDrop { from { height: 0; opacity: 1; } to { height: 16px; opacity: 1; } }
+@keyframes nubFade { to { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-thread { display: none; }
+  .statement-panel { animation: none; }
+  .web-deco { animation: none; }
+  .reveal::before { animation: none; display: none; }
+}
+
+@media (max-width: 640px) {
+  .web-deco { width: 100px; height: 100px; opacity: 0.035; }
+}
+
+/* ===========================================================
    High-end interactions: cursor thread, magnetic pull, 3D tilt
    Desktop with a fine pointer only — see script.js gate.
 =========================================================== */

@@ -171,6 +171,36 @@
       el.style.transform = '';
     });
   });
+
+  // Click anywhere: spin a connecting thread from the last click point to
+  // this one, like paying out a strand. Old strands fade and clear out.
+  var lastClick = null;
+  var strands = [];
+  document.addEventListener('click', function (e) {
+    var svg = document.querySelector('.cursor-thread');
+    if (lastClick) {
+      var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', lastClick.x);
+      line.setAttribute('y1', lastClick.y);
+      line.setAttribute('x2', e.clientX);
+      line.setAttribute('y2', e.clientY);
+      line.setAttribute('class', 'click-strand');
+      svg.appendChild(line);
+      strands.push(line);
+      if (strands.length > 5) {
+        var oldest = strands.shift();
+        oldest.remove();
+      }
+      window.setTimeout(function () {
+        line.classList.add('fade');
+        window.setTimeout(function () {
+          line.remove();
+          strands = strands.filter(function (s) { return s !== line; });
+        }, 500);
+      }, 700);
+    }
+    lastClick = { x: e.clientX, y: e.clientY };
+  });
 })();
 
 
