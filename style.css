@@ -458,16 +458,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   50% { opacity: 0; }
 }
 
-/* Scroll reveal: one-time fade + rise per element, staggered by sibling order */
-.reveal {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.reveal.in-view {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Scroll reveal: one-time rise per element, staggered by sibling order
+   (final easing defined further down, in the high-end interactions block) */
 .entry.reveal { transition-delay: 0.05s; }
 .project-panel.reveal:nth-child(2) { transition-delay: 0.1s; }
 .skill-group.reveal:nth-child(2) { transition-delay: 0.05s; }
@@ -527,6 +519,82 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .metric { transition: transform 0.2s ease; }
 .metric:hover { transform: translateY(-2px); }
+
+/* ===========================================================
+   High-end interactions: cursor thread, magnetic pull, 3D tilt
+   Desktop with a fine pointer only — see script.js gate.
+=========================================================== */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+.cursor-ring {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--accent);
+  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+.cursor-ring.active {
+  width: 52px;
+  height: 52px;
+  border-color: var(--accent-ink);
+}
+.cursor-thread {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 998;
+}
+.cursor-thread line {
+  stroke: var(--accent);
+  stroke-width: 1;
+  opacity: 0.45;
+}
+
+body.has-fine-cursor { cursor: none; }
+body.has-fine-cursor a,
+body.has-fine-cursor button { cursor: none; }
+
+.magnetic {
+  will-change: transform;
+}
+
+/* 3D tilt targets get a touch of depth */
+.project-panel, .metric {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Elastic, springy reveal — overshoots slightly before settling */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px) scale(0.97);
+  transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (max-width: 900px), (hover: none) {
+  .cursor-dot, .cursor-ring, .cursor-thread { display: none; }
+  body.has-fine-cursor { cursor: auto; }
+  body.has-fine-cursor a, body.has-fine-cursor button { cursor: pointer; }
+}
 
 /* ===========================================================
    Responsive
