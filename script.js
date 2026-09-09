@@ -47,3 +47,77 @@
     metrics.forEach(animateMetric);
   }
 })();
+
+// Rotating role line: cycles through how the role actually shows up across
+// his experience, typed and erased like a terminal prompt.
+(function () {
+  var el = document.getElementById('role-typed');
+  if (!el) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var roles = [
+    'Full-Stack Java Developer',
+    'Microservices Engineer',
+    'Distributed Systems Builder',
+    'Spring Boot & AWS'
+  ];
+
+  if (reduceMotion) {
+    el.textContent = roles[0];
+    return;
+  }
+
+  var roleIndex = 0;
+  var charIndex = roles[0].length;
+  var deleting = false;
+  var holdTime = 1600;
+  var typeSpeed = 55;
+  var deleteSpeed = 30;
+
+  function tick() {
+    var current = roles[roleIndex];
+    if (!deleting) {
+      charIndex++;
+      if (charIndex > current.length) {
+        charIndex = current.length;
+        deleting = true;
+        window.setTimeout(tick, holdTime);
+        return;
+      }
+    } else {
+      charIndex--;
+      if (charIndex < 0) {
+        charIndex = 0;
+        deleting = false;
+        roleIndex = (roleIndex + 1) % roles.length;
+      }
+    }
+    el.textContent = current.slice(0, charIndex);
+    window.setTimeout(tick, deleting ? deleteSpeed : typeSpeed);
+  }
+
+  window.setTimeout(tick, holdTime);
+})();
+
+// Scroll reveal: fade + rise each tagged element once, the first time it
+// enters the viewport. Skipped entirely under reduced motion (CSS handles it).
+(function () {
+  var items = document.querySelectorAll('.reveal');
+  if (!items.length) return;
+
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('in-view'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  items.forEach(function (el) { observer.observe(el); });
+})();
+

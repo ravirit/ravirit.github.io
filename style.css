@@ -440,6 +440,95 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* ===========================================================
+   Motion
+=========================================================== */
+
+/* Typing cursor next to the rotating role text */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.95em;
+  margin-left: 3px;
+  background: var(--accent);
+  vertical-align: -0.12em;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Scroll reveal: one-time fade + rise per element, staggered by sibling order */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+.entry.reveal { transition-delay: 0.05s; }
+.project-panel.reveal:nth-child(2) { transition-delay: 0.1s; }
+.skill-group.reveal:nth-child(2) { transition-delay: 0.05s; }
+.skill-group.reveal:nth-child(3) { transition-delay: 0.1s; }
+.skill-group.reveal:nth-child(5) { transition-delay: 0.05s; }
+.skill-group.reveal:nth-child(6) { transition-delay: 0.1s; }
+.skill-group.reveal:nth-child(8) { transition-delay: 0.05s; }
+.skill-group.reveal:nth-child(9) { transition-delay: 0.1s; }
+.skill-group.reveal:nth-child(11) { transition-delay: 0.05s; }
+.skill-group.reveal:nth-child(12) { transition-delay: 0.1s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .cursor { animation: none; }
+}
+
+/* Hover interactions */
+.nav-links a:not(.nav-resume) {
+  position: relative;
+}
+.nav-links a:not(.nav-resume)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+.nav-links a:not(.nav-resume):hover::after { width: 100%; }
+.nav-links a:not(.nav-resume):hover { text-decoration: none; }
+
+.project-panel {
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.project-panel:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 24px rgba(20, 99, 86, 0.12);
+}
+
+.entry {
+  transition: background-color 0.25s ease;
+}
+.entry:hover {
+  background-color: var(--accent-soft);
+}
+
+.skill-group {
+  transition: transform 0.2s ease;
+}
+.skill-group:hover { transform: translateX(3px); }
+
+.btn { transition: background-color 0.2s ease, transform 0.15s ease, border-color 0.2s ease; }
+.btn:active { transform: scale(0.97); }
+
+.metric { transition: transform 0.2s ease; }
+.metric:hover { transform: translateY(-2px); }
+
+/* ===========================================================
    Responsive
 =========================================================== */
 @media (max-width: 880px) {
