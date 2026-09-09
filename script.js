@@ -80,7 +80,7 @@
       if (charIndex > current.length) {
         charIndex = current.length;
         deleting = true;
-        window.setTimeout(tick, holdTime);
+        window.setTimeout(tick, deleteSpeed);
         return;
       }
     } else {
@@ -95,7 +95,7 @@
     window.setTimeout(tick, deleting ? deleteSpeed : typeSpeed);
   }
 
-  window.setTimeout(tick, holdTime);
+  window.setTimeout(tick, 900);
 })();
 
 // Scroll reveal: fade + rise each tagged element once, the first time it
