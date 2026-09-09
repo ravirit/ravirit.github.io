@@ -33,4 +33,4 @@ Open `index.html` in a browser, or serve the directory with any static web serve
 
 - GitHub: https://github.com/ravirit
 - LinkedIn: https://www.linkedin.com/in/ravikiran-bethala-38b8a8218/
-- Email: ravikiran.rk.bethala@outlook.com
+- Email: ravikiran.rk.bethala@gmail.com
